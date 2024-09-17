@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台中拉麵店地圖</title>
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>台中拉麵店地圖</h1>
+    <div id="map"></div>
+
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: { lat: 24.1477, lng: 120.6736 } // 台中市的中心點
+            });
+
+            var geocoder = new google.maps.Geocoder();
+
+            var ramenShops = [
+                // 東區
+                { name: "麵屋本心", address: "台中市東區福仁街22號" },
+                { name: "雞鹽拉麵", address: "台中市東區復興路四段105號" },
+
+                // 西區
+                { name: "麵屋清流", address: "台中市西區臺灣大道二段48號" },
+                { name: "山下公園", address: "台中市西區健行路1049號金典綠園道商場三樓" },
+                { name: "渡山樓", address: "台中市西區公正路170號" },
+                { name: "裕手串", address: "台中市西區中美街382號" },
+                { name: "鮭の大助", address: "台中市西區向上路一段170號" },
+                { name: "北穗製麵所", address: "台中市西區公益路124巷2號" },
+                { name: "七面鳥", address: "台中市西區中美街331巷15號" },
+                { name: "麵屋零", address: "台中市西區向上路一段245巷9號" },
+                { name: "無魚", address: "台中市西區模範市場一巷31號" },
+                { name: "Concept La’麺 KnockOut總本店", address: "台中市西區忠誠街127號" },
+                { name: "無招牌日式雞白湯", address: "台中市西區向上路一段17巷1弄3號" },
+                { name: "蝦蝦拉麵元氣屋", address: "台中市西區中美街419之4號" },
+                { name: "麵吉祥", address: "台中市西區五權五街79巷8號" },
+                { name: "火曜二代目", address: "台中市西區柳川西路二段192號" },
+                { name: "東京醬油拉麵超級丸", address: "台中市西區明義街50號" },
+                { name: "信川屋", address: "台中市西區中興四巷21號" },
+                { name: "火曜總本山", address: "台中市西區柳川西路二段192號" },
+
+                // 南區
+                { name: "狸匠", address: "台中市南區興大路90號" },
+                { name: "麵屋秋鳴", address: "台中市南區文心南路715號" },
+                { name: "一丸老麵", address: "台中市南區福田二街258號" },
+
+                // 北區
+                { name: "激勵軒", address: "台中市北區三民路三段166-3號" },
+                { name: "佐原拉麵", address: "台中市北區五權路379號" },
+                { name: "麵屋灯川", address: "台中市北區太原路二段229號" },
+                { name: "盡心亭", address: "台中市北區五常街60號" },
+
+                // 中區
+                { name: "麵屋海鳴", address: "台中市中區中山路48號" },
+                { name: "有囍拉麵", address: "台中市中區中山路82號" },
+                { name: "麵屋聚", address: "台中市中區成功路404號" },
+
+                // 西屯區
+                { name: "千璽公子", address: "台中市西屯區文心路三段66號" },
+                { name: "MEN Monster", address: "台中市西屯區慶和街32號" },
+                { name: "牛庵", address: "台中市西屯區文心路三段107-16號" },
+                { name: "橫濱家系拉麵家", address: "台中市西屯區大墩十九街95號" },
+                { name: "千臺公子", address: "台中市西屯區文心路三段66號" },
+
+                // 北屯區
+                { name: "麵本初", address: "台中市北屯區熱河路二段210號" },
+                { name: "川澤拉麵", address: "台中市北屯區梅川東路四段107號" }
+            ];
+
+            ramenShops.forEach(function(shop) {
+                geocodeAddress(geocoder, map, shop);
+            });
+        }
+
+        function geocodeAddress(geocoder, map, shop) {
+            geocoder.geocode({ 'address': shop.address }, function(results, status) {
+                if (status === 'OK') {
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        title: shop.name
+                    });
+
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: `<h3>${shop.name}</h3>`
+                    });
+
+                    marker.addListener('click', function() {
+                        infoWindow.open(map, marker);
+                    });
+                } else {
+                    console.error('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+    </script>
+
+    <!-- 引入 Google Maps API 並使用你的 API 密鑰 -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU3UPOoRVDel7HBC9JMFJE5fSOnOmgNQk&callback=initMap"></script>
+</body>
+</html>
